@@ -2,12 +2,12 @@ import React, { useCallback, useState } from 'react';
 import { Success, Form, Error, Label, Input, LinkContainer, Button, Header } from '@pages/SignUp/styles';
 import useInput from '@hooks/useInput';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 
 const LogIn = () => {
-  const { data, error } = useSWR('/api/users', fetcher);
+  const { data, error, revalidate } = useSWR('/api/users', fetcher);
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
@@ -23,13 +23,20 @@ const LogIn = () => {
             withCredentials: true,
           },
         )
-        .then((response) => {})
+        .then((response) => {
+          revalidate();
+        })
         .catch((error) => {
           setLogInError(error.response?.data?.statusCode === 401);
         });
     },
     [email, password],
   );
+
+  // 로그인 성공 후 채널로 이동
+  if (data) {
+    return <Redirect to={'/workspace/channel'} />;
+  }
 
   return (
     <div id="container">
