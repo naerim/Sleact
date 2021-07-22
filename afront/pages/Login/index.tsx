@@ -24,6 +24,7 @@ const LogIn = () => {
           },
         )
         .then((response) => {
+          // 다시 10줄로 돌아가서 data가 생김
           revalidate();
         })
         .catch((error) => {
