@@ -34,8 +34,13 @@ const LogIn = () => {
     [email, password],
   );
 
-  // 로그인 성공 후 채널로 이동
+  // 로딩중
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
+
   if (data) {
+    // 로그인 성공 후 채널로 이동
     return <Redirect to={'/workspace/channel'} />;
   }
 

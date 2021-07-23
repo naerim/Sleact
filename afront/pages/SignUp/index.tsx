@@ -57,6 +57,11 @@ const SignUp = () => {
     [email, nickname, password, passwordCheck, mismatchError],
   );
 
+  // 로딩중
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
+
   if (data) {
     return <Redirect to="/workspace/channel" />;
   }
