@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 
 const LogIn = () => {
-  const { data, error, revalidate } = useSWR('/api/users', fetcher);
+  const { data, error, revalidate, mutate } = useSWR('/api/users', fetcher);
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
@@ -25,7 +25,8 @@ const LogIn = () => {
         )
         .then((response) => {
           // 다시 10줄로 돌아가서 data가 생김
-          revalidate();
+          // mutate는 서버에 요청 안보내고 data만 바꿔줌
+          mutate(response.data, false);
         })
         .catch((error) => {
           setLogInError(error.response?.data?.statusCode === 401);

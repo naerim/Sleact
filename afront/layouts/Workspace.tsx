@@ -5,11 +5,13 @@ import axios from 'axios';
 import { Redirect } from 'react-router';
 
 const Workspace: FC = ({ children }) => {
-  const { data, error, revalidate } = useSWR('/api/users', fetcher);
+  const { data, error, revalidate, mutate } = useSWR('/api/users', fetcher, {
+    dedupingInterval: 2000, // 2초
+  });
   const onLogout = useCallback(() => {
     axios.post('/api/users/logout', null, { withCredentials: true }).then(() => {
       // 정보가 false로 바뀜
-      revalidate();
+      mutate(false, false);
     });
   }, []);
 
